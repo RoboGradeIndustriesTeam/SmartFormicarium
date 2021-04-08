@@ -11,6 +11,12 @@
 
 #define u8 uint8_t
 
+#include <Adafruit_Sensor.h>
+#include <DHT.h>
+#include <DHT_U.h>
+
+DHT_Unified dht(10, DHT11);
+
 const char* ssid = STASSID;
 const char* password = STAPSK;
 
@@ -26,12 +32,18 @@ String handleCmd(DynamicJsonDocument doc) {
        "cmd": "fan",
        "data": {
          "fan_number": 32,
-         "action": false
+         "action": 0
        }
       }
     */
     const u8 fan_number = doc["data"]["fan_number"];
     const u8 action = (u8) doc["data"]["action"];
+    if (fan_number == 0) {
+      digitalWrite(7, action);
+    }
+    if (fan_number == 1) {
+      digitalWrite(8, action);
+    }
     Serial.println("Fan command requested: fun_number: [" + String(fan_number) + "], action: [" + String(action) + "]");
     dataS = "{\"success\": 1}";
   }
@@ -40,15 +52,13 @@ String handleCmd(DynamicJsonDocument doc) {
       {
        "cmd": "light",
        "data": {
-         "pixel_number": 0,
          "action" : 1
        }
       }
     */
-    const u8 pixel_number = doc["data"]["pixel_number"];
     const u8 action = doc["data"]["action"];
-
-    Serial.println("Light command requested: pixel_number: [" +  String(pixel_number) + "], action: [" + String(action) + "]");
+    digitalWrite(9, action);
+    Serial.println("Light command requested: action: [" + String(action) + "]");
     dataS = "{\"success\": 1}";
   }
   else if ((String) _command == "sensor") {
@@ -62,9 +72,33 @@ String handleCmd(DynamicJsonDocument doc) {
     */
     // Что-бы получить name: (String) _name
     const char* _name = doc["data"]["name"];
-  
+    sensors_event_t event;
+    dht.temperature().getEvent(&event);
+    u8 temp = event.temperature;
+    dht.humidity().getEvent(&event);
+    u8 hum = event.relative_humidity;
+    if ((String) _name == "dht") {
+      dataS = "{\"success\": 1, \"sensorTemp\": " + (String)temp + ", \"sensorHum\": " + (String)hum + "}"
+    }
     Serial.println("Sensor command requested: name: [" +  String(_name) + "]");
-    dataS = "{\"success\": 1, \"sensorData1\": 0, \"sensorData2\": 0, \"sensorData3\": 0, \"sensorDataX\": 0}";
+  }
+  else if ((String) _command == "set") {
+    /*
+      {
+       "cmd": "set",
+       "data": {
+         "type": "hum",
+         "value": 32
+       }
+      }
+    */
+    // Что-бы получить name: (String) _name
+    const char* _name = doc["data"]["type"];
+    const u8 value = doc["data"]["value"]
+    if ((String) _name == "hum") {
+      dataS = "{\"success\": 0}"
+    }
+    Serial.println("Set command requested: temp: [" +  String(_name) + "], value: [" +  String(value) + "]");
   }
   return dataS;
 }

@@ -20,13 +20,12 @@ def req_fan(fan_number=0, action=0):
     return requests.post(os.getenv("FORMICARIUM_IP"), data=json.dumps(data)).json()
 
 
-def req_light(pixel_number=0, action=0):
+def req_light(action=0):
     data = {
-            "cmd": "light",
-            "data": {
-                "pixel_number": pixel_number,
-                "action": action
-            }
+        "cmd": "light",
+        "data": {
+            "action": action
+        }
     }
     return requests.post(os.getenv("FORMICARIUM_IP"), data=json.dumps(data)).json()
 
@@ -36,6 +35,17 @@ def req_sensor(sensor_name="dht"):
         "cmd": "sensor",
         "data": {
             "name": sensor_name
+        }
+    }
+    return requests.post(os.getenv("FORMICARIUM_IP"), data=json.dumps(data)).json()
+
+
+def req_set(type="hum", value=0):
+    data = {
+        "cmd": "set",
+        "data": {
+            "type": type,
+            "value": value
         }
     }
     return requests.post(os.getenv("FORMICARIUM_IP"), data=json.dumps(data)).json()
