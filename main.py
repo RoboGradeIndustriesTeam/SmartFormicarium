@@ -63,8 +63,6 @@ def index():
 @app.route('/climat', methods=["GET", "POST"])
 @app.route('/climat.html', methods=["GET", "POST"])
 def climat():
-    print(dict(request.form))
-    print(req_sensor("dht"))
     if request.method == "POST":
         if request.form.get("valueHum") is not None:
             req_set("hum", value=req_sensor("dht")["sensorHum"] + int(request.form.get("valueHum")))

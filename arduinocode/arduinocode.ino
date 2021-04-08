@@ -98,6 +98,9 @@ String handleCmd(DynamicJsonDocument doc) {
     if ((String) _name == "hum") {
       dataS = "{\"success\": 0}";
     }
+    if ((String) _name == "temp") {
+      dataS = "{\"success\": 0}";
+    }
     Serial.println("Set command requested: temp: [" +  String(_name) + "], value: [" +  String(value) + "]");
   }
   return dataS;

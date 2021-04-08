@@ -147,7 +147,7 @@
                                         </div>
                                         <div class="col-8" style="height: 38px;">
                                             <div class="alert alert-danger text-center" role="alert">
-                                                <span><strong>23°</strong></span></div>
+                                                <span><strong>{{ req_sensor("dht")["sensorTemp"] }}°</strong></span></div>
                                         </div>
                                         <div class="col"><button class="btn btn-primary"
                                                 onclick="document.getElementById('tempForm').valueTemp.value = String(parseInt(document.getElementById('tempForm').valueTemp.value) - 1); document.getElementById('tempForm').submit(); document.getElementById('tmp').innerHTML = String(parseInt(document.getElementById('tmp').innerHTML) - 5) + '°'"
@@ -172,7 +172,7 @@
                                         </div>
                                         <div class="col-8" style="height: 38px;">
                                             <div class="alert alert-info text-center" role="alert"><span><strong
-                                                        id="hum">15%</strong></span></div>
+                                                        id="hum">{{ req_sensor("dht")["sensorHum"] }}</strong></span></div>
                                         </div>
                                         <div class="col"><button class="btn btn-primary" type="button"
                                                 onclick="document.getElementById('humForm').valueHum.value = String(parseInt(document.getElementById('humForm').valueHum.value) - 5); document.getElementById('humForm').submit(); document.getElementById('hum').innerHTML = String(parseInt(document.getElementById('hum').innerHTML) - 5) + '%'">-5%</button>
