@@ -25,7 +25,7 @@ ESP8266WebServer server(80);
 String handleCmd(DynamicJsonDocument doc) {
   const char* _command = doc["cmd"];
   // Что-бы получить command: (String) _command
-  auto dataS = "{\"success\": 0}";
+  String dataS = "{\"success\": 0}";
   if ((String) _command == "fan") {
     /*
       {
@@ -78,7 +78,7 @@ String handleCmd(DynamicJsonDocument doc) {
     dht.humidity().getEvent(&event);
     u8 hum = event.relative_humidity;
     if ((String) _name == "dht") {
-      dataS = "{\"success\": 1, \"sensorTemp\": " + (String)temp + ", \"sensorHum\": " + (String)hum + "}"
+      dataS = (String)"{\"success\": 1, \"sensorTemp\": " + (String)temp + ", \"sensorHum\": " + (String)hum + "}";
     }
     Serial.println("Sensor command requested: name: [" +  String(_name) + "]");
   }
@@ -94,9 +94,9 @@ String handleCmd(DynamicJsonDocument doc) {
     */
     // Что-бы получить name: (String) _name
     const char* _name = doc["data"]["type"];
-    const u8 value = doc["data"]["value"]
+    const u8 value = doc["data"]["value"];
     if ((String) _name == "hum") {
-      dataS = "{\"success\": 0}"
+      dataS = "{\"success\": 0}";
     }
     Serial.println("Set command requested: temp: [" +  String(_name) + "], value: [" +  String(value) + "]");
   }
